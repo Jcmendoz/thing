@@ -30,9 +30,6 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
         . . c c c c . . 
         `, player2, 50, 50)
 })
-info.player2.onLifeZero(function () {
-    info.player2.changeScoreBy(-1)
-})
 let player2projectile: Sprite = null
 let player2: Sprite = null
 scene.setBackgroundImage(img`
