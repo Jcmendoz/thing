@@ -2,7 +2,8 @@
     "name": "thing",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "sprite-scaling": "*"
     },
     "files": [
         "main.blocks",
