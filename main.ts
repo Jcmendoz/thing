@@ -242,6 +242,7 @@ function obstacles () {
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.player2, function (sprite, otherSprite) {
     info.player2.changeLifeBy(-1)
+    sprite.destroy()
 })
 let car_8: Sprite = null
 let car_7: Sprite = null
