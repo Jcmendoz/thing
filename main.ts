@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const obstacle = SpriteKind.create()
+    export const player2 = SpriteKind.create()
 }
 function playertwo () {
     player2 = sprites.create(img`
@@ -19,7 +20,7 @@ function playertwo () {
         . . . f f f f . . . . . . . . . 
         . . f f f e e e . . . . . . . . 
         . . f f f f e e e . . . . . . . 
-        `, SpriteKind.Player)
+        `, SpriteKind.player2)
     player2.setPosition(50, 50)
     controller.player2.moveSprite(player2, 25, 25)
     info.player2.setLife(3)
@@ -82,6 +83,9 @@ function Ice_knight () {
     iceknight.setPosition(125, 50)
     info.player1.setLife(3)
 }
+info.player2.onLifeZero(function () {
+    game.over(false)
+})
 function obstacles () {
     car1 = sprites.create(img`
         . . . . . . 8 8 f f 8 8 . . . . 
@@ -236,6 +240,9 @@ function obstacles () {
         `, SpriteKind.Player)
     car_8.setPosition(110, 55)
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.player2, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+})
 let car_8: Sprite = null
 let car_7: Sprite = null
 let car_6: Sprite = null
