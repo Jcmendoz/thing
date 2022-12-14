@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const obstacle = SpriteKind.create()
     export const player2 = SpriteKind.create()
+    export const projectile2 = SpriteKind.create()
 }
 function playertwo () {
     player2 = sprites.create(img`
@@ -55,11 +56,8 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
         . c 5 5 5 2 c . 
         . . c c c c . . 
         `, player2, 50, 50)
+    player2projectile.setKind(SpriteKind.projectile2)
     music.smallCrash.playUntilDone()
-})
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
-    info.player1.changeLifeBy(-1)
-    sprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.obstacle, function (sprite, otherSprite) {
     projectile.destroy(effects.blizzard, 100)
@@ -87,165 +85,188 @@ function Ice_knight () {
     iceknight.setPosition(125, 50)
     info.player1.setLife(3)
 }
+sprites.onOverlap(SpriteKind.player2, SpriteKind.obstacle, function (sprite, otherSprite) {
+    projectile.destroy(effects.blizzard, 100)
+})
+sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Player, function (sprite, otherSprite) {
+    info.player1.changeLifeBy(-1)
+    sprite.destroy()
+})
 info.player1.onLifeZero(function () {
     game.over(false)
 })
 info.player2.onLifeZero(function () {
     game.over(false)
 })
-function obstacles () {
-    car1 = sprites.create(img`
-        . . . . . . 8 8 f f 8 8 . . . . 
-        . . . . . 8 6 6 6 6 6 6 8 . . . 
-        . . . . 6 f 6 6 6 6 6 6 f 6 . . 
-        . . . 8 6 f f 6 6 6 6 6 f 6 8 . 
-        . . . f 6 6 f 6 6 6 6 6 f 6 f . 
-        . . . f 6 6 f 6 6 6 6 6 6 6 f . 
-        . . . f 6 6 f 6 6 6 6 6 6 6 f . 
-        . . . f 6 f 6 9 9 6 6 6 f 6 f . 
-        . . . 8 6 f 8 c c c c 8 f 6 8 . 
-        . . . 8 6 8 c f f f f c 8 6 8 . 
-        . . . 8 6 8 f f f f f f 8 6 8 . 
-        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
-        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
-        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
-        . . . f f 8 8 8 8 8 8 8 8 f f . 
-        . . . . f f . . . . . . f f . . 
-        `, SpriteKind.obstacle)
-    car1.setPosition(75, 50)
-    car_2 = sprites.create(img`
-        . . . . . . 2 2 f f 2 2 . . . . 
-        . . . . . 2 2 2 2 2 2 2 2 . . . 
-        . . . . 2 f 2 2 2 2 2 2 f 2 . . 
-        . . . 2 2 f f 2 2 2 2 2 f 2 2 . 
-        . . . f 2 2 f 2 2 2 2 2 f 2 f . 
-        . . . f 2 2 f 2 2 2 2 2 2 2 f . 
-        . . . f 2 2 f 2 2 2 2 2 2 2 f . 
-        . . . f 2 f 2 2 2 2 2 2 f 2 f . 
-        . . . 2 2 f 2 c c c c 2 f 2 2 . 
-        . . . 2 2 2 c f f f f c 2 2 2 . 
-        . . . 2 2 2 f f f f f f 2 2 2 . 
-        . . . 2 2 2 2 2 2 2 2 2 2 2 2 . 
-        . . . f 2 d 2 2 2 2 2 2 d 2 f . 
-        . . . f 2 6 d 2 2 2 2 d 6 2 f . 
-        . . . f f 2 2 2 2 2 2 2 2 f f . 
-        . . . . f f . . . . . . f f . . 
-        `, SpriteKind.obstacle)
-    car_2.setPosition(75, 70)
-    car_3 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . 2 2 2 2 2 2 2 2 . . . . 
-        . . . 2 4 2 2 2 2 2 2 6 2 . . . 
-        . . 2 6 4 2 2 2 2 2 2 6 6 2 . . 
-        . 2 6 6 4 4 4 4 4 4 2 6 6 4 2 d 
-        . 2 6 2 e e e e e e e 6 6 4 2 2 
-        . 2 2 e 6 6 e 6 6 6 e e 6 4 2 2 
-        . 2 e 6 6 6 e 6 6 6 6 e 2 2 2 2 
-        . e e 2 2 2 e 2 2 2 2 2 e 2 2 2 
-        . e e e e e e f e e e f e 2 d d 
-        . e e e e e e f e e f e e e 2 d 
-        . e e e e e e f f f e e e e e e 
-        . e f f f f e e e e f f f e e e 
-        . . f f f f f e e f f f f f e . 
-        . . . f f f . . . . f f f f . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.obstacle)
-    car_3.setPosition(45, 80)
-    car_4 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . 2 2 2 2 2 2 2 2 . . . . 
-        . . . 2 4 2 2 2 2 2 2 6 2 . . . 
-        . . 2 6 4 2 2 2 2 2 2 6 6 2 . . 
-        . 2 6 6 4 4 4 4 4 4 2 6 6 4 2 d 
-        . 2 6 2 e e e e e e e 6 6 4 2 2 
-        . 2 2 e 6 6 e 6 6 6 e e 6 4 2 2 
-        . 2 e 6 6 6 e 6 6 6 6 e 2 2 2 2 
-        . e e 2 2 2 e 2 2 2 2 2 e 2 2 2 
-        . e e e e e e f e e e f e 2 d d 
-        . e e e e e e f e e f e e e 2 d 
-        . e e e e e e f f f e e e e e e 
-        . e f f f f e e e e f f f e e e 
-        . . f f f f f e e f f f f f e . 
-        . . . f f f . . . . f f f f . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.obstacle)
-    car_4.setPosition(45, 110)
-    car_5 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . a a a a a a a a . . . . 
-        . . . a c a a a a a a 6 a . . . 
-        . . a 6 c a a a a a a 6 6 a . . 
-        . a 6 6 c c c c c c a 6 6 c a d 
-        . a 6 a a a a a a a a 6 6 c a a 
-        . a a c 6 6 a 6 6 6 a a 6 c a a 
-        . a a 6 6 6 a 6 6 6 6 a a a a a 
-        . a a c c c a c c c c c a a a a 
-        . a a a a a a f a a a f a a d d 
-        . a a a a a a f a a f a a a b d 
-        . a a a a a a f f f a a a a a a 
-        . a f f f f a a a a f f f a a a 
-        . . f f f f f a a f f f f f a . 
-        . . . f f f . . . . f f f f . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.obstacle)
-    car_5.setPosition(25, 110)
-    car_6 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 6 6 6 6 6 6 6 6 . . 
-        . . . . . 6 c 6 6 6 6 6 6 9 6 . 
-        . . . . 6 c c 6 6 6 6 6 6 9 c 6 
-        . . d 6 9 c c 6 9 9 9 9 9 9 c c 
-        . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
-        . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
-        . 6 6 6 6 6 8 b b b b 8 b b b 8 
-        . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
-        . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
-        . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
-        . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
-        . 8 8 8 8 f f f 8 8 8 8 f f f f 
-        . . . 8 f f f f f 8 8 f f f f f 
-        . . . . f f f f . . . . f f f . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Player)
-    car_6.setPosition(110, 35)
-    car_7 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 6 6 6 6 6 6 6 6 . . 
-        . . . . . 6 c 6 6 6 6 6 6 9 6 . 
-        . . . . 6 c c 6 6 6 6 6 6 9 c 6 
-        . . d 6 9 c c 6 9 9 9 9 9 9 c c 
-        . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
-        . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
-        . 6 6 6 6 6 8 b b b b 8 b b b 8 
-        . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
-        . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
-        . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
-        . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
-        . 8 8 8 8 f f f 8 8 8 8 f f f f 
-        . . . 8 f f f f f 8 8 f f f f f 
-        . . . . f f f f . . . . f f f . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Player)
-    car_7.setPosition(135, 35)
-    car_8 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 6 6 6 6 6 6 6 6 . . 
-        . . . . . 6 c 6 6 6 6 6 6 9 6 . 
-        . . . . 6 c c 6 6 6 6 6 6 9 c 6 
-        . . d 6 9 c c 6 9 9 9 9 9 9 c c 
-        . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
-        . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
-        . 6 6 6 6 6 8 b b b b 8 b b b 8 
-        . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
-        . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
-        . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
-        . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
-        . 8 8 8 8 f f f 8 8 8 8 f f f f 
-        . . . 8 f f f f f 8 8 f f f f f 
-        . . . . f f f f . . . . f f f . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Player)
-    car_8.setPosition(110, 55)
+function obstacles (num: number) {
+    if (num > 1) {
+        car1 = sprites.create(img`
+            . . . . . . 8 8 f f 8 8 . . . . 
+            . . . . . 8 6 6 6 6 6 6 8 . . . 
+            . . . . 6 f 6 6 6 6 6 6 f 6 . . 
+            . . . 8 6 f f 6 6 6 6 6 f 6 8 . 
+            . . . f 6 6 f 6 6 6 6 6 f 6 f . 
+            . . . f 6 6 f 6 6 6 6 6 6 6 f . 
+            . . . f 6 6 f 6 6 6 6 6 6 6 f . 
+            . . . f 6 f 6 9 9 6 6 6 f 6 f . 
+            . . . 8 6 f 8 c c c c 8 f 6 8 . 
+            . . . 8 6 8 c f f f f c 8 6 8 . 
+            . . . 8 6 8 f f f f f f 8 6 8 . 
+            . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
+            . . . f 8 d 8 8 8 8 8 8 d 8 f . 
+            . . . f 8 6 d 8 8 8 8 d 6 8 f . 
+            . . . f f 8 8 8 8 8 8 8 8 f f . 
+            . . . . f f . . . . . . f f . . 
+            `, SpriteKind.obstacle)
+        car1.setPosition(75, 50)
+        if (num > 2) {
+            car_2 = sprites.create(img`
+                . . . . . . 2 2 f f 2 2 . . . . 
+                . . . . . 2 2 2 2 2 2 2 2 . . . 
+                . . . . 2 f 2 2 2 2 2 2 f 2 . . 
+                . . . 2 2 f f 2 2 2 2 2 f 2 2 . 
+                . . . f 2 2 f 2 2 2 2 2 f 2 f . 
+                . . . f 2 2 f 2 2 2 2 2 2 2 f . 
+                . . . f 2 2 f 2 2 2 2 2 2 2 f . 
+                . . . f 2 f 2 2 2 2 2 2 f 2 f . 
+                . . . 2 2 f 2 c c c c 2 f 2 2 . 
+                . . . 2 2 2 c f f f f c 2 2 2 . 
+                . . . 2 2 2 f f f f f f 2 2 2 . 
+                . . . 2 2 2 2 2 2 2 2 2 2 2 2 . 
+                . . . f 2 d 2 2 2 2 2 2 d 2 f . 
+                . . . f 2 6 d 2 2 2 2 d 6 2 f . 
+                . . . f f 2 2 2 2 2 2 2 2 f f . 
+                . . . . f f . . . . . . f f . . 
+                `, SpriteKind.obstacle)
+            car_2.setPosition(75, 70)
+            if (num > 3) {
+                car_3 = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . 2 2 2 2 2 2 2 2 . . . . 
+                    . . . 2 4 2 2 2 2 2 2 6 2 . . . 
+                    . . 2 6 4 2 2 2 2 2 2 6 6 2 . . 
+                    . 2 6 6 4 4 4 4 4 4 2 6 6 4 2 d 
+                    . 2 6 2 e e e e e e e 6 6 4 2 2 
+                    . 2 2 e 6 6 e 6 6 6 e e 6 4 2 2 
+                    . 2 e 6 6 6 e 6 6 6 6 e 2 2 2 2 
+                    . e e 2 2 2 e 2 2 2 2 2 e 2 2 2 
+                    . e e e e e e f e e e f e 2 d d 
+                    . e e e e e e f e e f e e e 2 d 
+                    . e e e e e e f f f e e e e e e 
+                    . e f f f f e e e e f f f e e e 
+                    . . f f f f f e e f f f f f e . 
+                    . . . f f f . . . . f f f f . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.obstacle)
+                car_3.setPosition(45, 80)
+                if (num > 4) {
+                    car_4 = sprites.create(img`
+                        . . . . . . . . . . . . . . . . 
+                        . . . . 2 2 2 2 2 2 2 2 . . . . 
+                        . . . 2 4 2 2 2 2 2 2 6 2 . . . 
+                        . . 2 6 4 2 2 2 2 2 2 6 6 2 . . 
+                        . 2 6 6 4 4 4 4 4 4 2 6 6 4 2 d 
+                        . 2 6 2 e e e e e e e 6 6 4 2 2 
+                        . 2 2 e 6 6 e 6 6 6 e e 6 4 2 2 
+                        . 2 e 6 6 6 e 6 6 6 6 e 2 2 2 2 
+                        . e e 2 2 2 e 2 2 2 2 2 e 2 2 2 
+                        . e e e e e e f e e e f e 2 d d 
+                        . e e e e e e f e e f e e e 2 d 
+                        . e e e e e e f f f e e e e e e 
+                        . e f f f f e e e e f f f e e e 
+                        . . f f f f f e e f f f f f e . 
+                        . . . f f f . . . . f f f f . . 
+                        . . . . . . . . . . . . . . . . 
+                        `, SpriteKind.obstacle)
+                    car_4.setPosition(45, 110)
+                    if (num > 5) {
+                        car_5 = sprites.create(img`
+                            . . . . . . . . . . . . . . . . 
+                            . . . . a a a a a a a a . . . . 
+                            . . . a c a a a a a a 6 a . . . 
+                            . . a 6 c a a a a a a 6 6 a . . 
+                            . a 6 6 c c c c c c a 6 6 c a d 
+                            . a 6 a a a a a a a a 6 6 c a a 
+                            . a a c 6 6 a 6 6 6 a a 6 c a a 
+                            . a a 6 6 6 a 6 6 6 6 a a a a a 
+                            . a a c c c a c c c c c a a a a 
+                            . a a a a a a f a a a f a a d d 
+                            . a a a a a a f a a f a a a b d 
+                            . a a a a a a f f f a a a a a a 
+                            . a f f f f a a a a f f f a a a 
+                            . . f f f f f a a f f f f f a . 
+                            . . . f f f . . . . f f f f . . 
+                            . . . . . . . . . . . . . . . . 
+                            `, SpriteKind.obstacle)
+                        car_5.setPosition(25, 110)
+                        if (num > 6) {
+                            car_6 = sprites.create(img`
+                                . . . . . . . . . . . . . . . . 
+                                . . . . . . 6 6 6 6 6 6 6 6 . . 
+                                . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+                                . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+                                . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+                                . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+                                . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+                                . 6 6 6 6 6 8 b b b b 8 b b b 8 
+                                . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+                                . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+                                . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+                                . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+                                . 8 8 8 8 f f f 8 8 8 8 f f f f 
+                                . . . 8 f f f f f 8 8 f f f f f 
+                                . . . . f f f f . . . . f f f . 
+                                . . . . . . . . . . . . . . . . 
+                                `, SpriteKind.Player)
+                            car_6.setPosition(110, 35)
+                            if (num > 7) {
+                                car_7 = sprites.create(img`
+                                    . . . . . . . . . . . . . . . . 
+                                    . . . . . . 6 6 6 6 6 6 6 6 . . 
+                                    . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+                                    . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+                                    . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+                                    . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+                                    . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+                                    . 6 6 6 6 6 8 b b b b 8 b b b 8 
+                                    . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+                                    . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+                                    . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+                                    . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+                                    . 8 8 8 8 f f f 8 8 8 8 f f f f 
+                                    . . . 8 f f f f f 8 8 f f f f f 
+                                    . . . . f f f f . . . . f f f . 
+                                    . . . . . . . . . . . . . . . . 
+                                    `, SpriteKind.Player)
+                                car_7.setPosition(135, 35)
+                                if (num > 8) {
+                                    car_8 = sprites.create(img`
+                                        . . . . . . . . . . . . . . . . 
+                                        . . . . . . 6 6 6 6 6 6 6 6 . . 
+                                        . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+                                        . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+                                        . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+                                        . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+                                        . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+                                        . 6 6 6 6 6 8 b b b b 8 b b b 8 
+                                        . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+                                        . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+                                        . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+                                        . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+                                        . 8 8 8 8 f f f 8 8 8 8 f f f f 
+                                        . . . 8 f f f f f 8 8 f f f f f 
+                                        . . . . f f f f . . . . f f f . 
+                                        . . . . . . . . . . . . . . . . 
+                                        `, SpriteKind.Player)
+                                    car_8.setPosition(110, 55)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.player2, function (sprite, otherSprite) {
     info.player2.changeLifeBy(-1)
@@ -388,4 +409,4 @@ scene.setBackgroundImage(img`
 Ice_knight()
 playertwo()
 iceknight.setStayInScreen(true)
-obstacles()
+obstacles(randint(0, 8))
