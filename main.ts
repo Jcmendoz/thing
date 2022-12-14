@@ -57,6 +57,10 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
         `, player2, 50, 50)
     music.smallCrash.playUntilDone()
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
+    info.player1.changeLifeBy(-1)
+    sprite.destroy()
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.obstacle, function (sprite, otherSprite) {
     projectile.destroy(effects.blizzard, 100)
 })
@@ -83,6 +87,9 @@ function Ice_knight () {
     iceknight.setPosition(125, 50)
     info.player1.setLife(3)
 }
+info.player1.onLifeZero(function () {
+    game.over(false)
+})
 info.player2.onLifeZero(function () {
     game.over(false)
 })
