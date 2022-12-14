@@ -3,6 +3,28 @@ namespace SpriteKind {
     export const player2 = SpriteKind.create()
     export const projectile2 = SpriteKind.create()
 }
+function power2 () {
+    pause(5000)
+    powerup = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . 4 4 4 4 . . . . . . 
+        . . . . 4 4 4 5 5 4 4 4 . . . . 
+        . . . 3 3 3 3 4 4 4 4 4 4 . . . 
+        . . 4 3 3 3 3 2 2 2 1 1 4 4 . . 
+        . . 3 3 3 3 3 2 2 2 1 1 5 4 . . 
+        . 4 3 3 3 3 2 2 2 2 2 5 5 4 4 . 
+        . 4 3 3 3 2 2 2 4 4 4 4 5 4 4 . 
+        . 4 4 3 3 2 2 4 4 4 4 4 4 4 4 . 
+        . 4 2 3 3 2 2 4 4 4 4 4 4 4 4 . 
+        . . 4 2 3 3 2 4 4 4 4 4 2 4 . . 
+        . . 4 2 2 3 2 2 4 4 4 2 4 4 . . 
+        . . . 4 2 2 2 2 2 2 2 2 4 . . . 
+        . . . . 4 4 2 2 2 2 4 4 . . . . 
+        . . . . . . 4 4 4 4 . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Food)
+    powerup.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
+}
 function playertwo () {
     player2 = sprites.create(img`
         . . . . 8 8 8 8 8 e . . . . . . 
@@ -25,7 +47,11 @@ function playertwo () {
     player2.setPosition(50, 50)
     controller.player2.moveSprite(player2, 25, 25)
     info.player2.setLife(3)
+    player2.setStayInScreen(true)
 }
+sprites.onOverlap(SpriteKind.projectile2, SpriteKind.obstacle, function (sprite, otherSprite) {
+    projectile.destroy(effects.blizzard, 100)
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile = sprites.createProjectileFromSprite(img`
         . . . . . . . . . . . . . . . . 
@@ -55,9 +81,19 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
         c 2 5 5 4 4 2 c 
         . c 5 5 5 2 c . 
         . . c c c c . . 
-        `, player2, 50, 50)
+        `, player2, 50, 0)
     player2projectile.setKind(SpriteKind.projectile2)
     music.smallCrash.playUntilDone()
+})
+sprites.onOverlap(SpriteKind.player2, SpriteKind.Food, function (sprite, otherSprite) {
+    if (info.life() == 10) {
+        sprite.sayText("Too much health!")
+        otherSprite.destroy()
+    } else {
+        info.player2.changeLifeBy(1)
+        otherSprite.destroy()
+        power2()
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.obstacle, function (sprite, otherSprite) {
     projectile.destroy(effects.blizzard, 100)
@@ -84,18 +120,28 @@ function Ice_knight () {
     controller.moveSprite(iceknight, 50, 50)
     iceknight.setPosition(125, 50)
     info.player1.setLife(3)
+    iceknight.setStayInScreen(true)
 }
-sprites.onOverlap(SpriteKind.player2, SpriteKind.obstacle, function (sprite, otherSprite) {
-    projectile.destroy(effects.blizzard, 100)
-})
 sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Player, function (sprite, otherSprite) {
     info.player1.changeLifeBy(-1)
     sprite.destroy()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    if (info.life() >= 10) {
+        sprite.sayText("Too much health!")
+        otherSprite.destroy()
+    } else {
+        info.changeLifeBy(1)
+        otherSprite.destroy()
+        power2()
+    }
+})
 info.player1.onLifeZero(function () {
+    game.splash("Player 2 wins!")
     game.over(false)
 })
 info.player2.onLifeZero(function () {
+    game.splash("Player 1 wins!")
     game.over(false)
 })
 function obstacles (num: number) {
@@ -281,9 +327,11 @@ let car_3: Sprite = null
 let car_2: Sprite = null
 let car1: Sprite = null
 let player2projectile: Sprite = null
+let iceknight: Sprite = null
 let projectile: Sprite = null
 let player2: Sprite = null
-let iceknight: Sprite = null
+let powerup: Sprite = null
+game.splash("2 players required")
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999111111111119999999999999999999999999999999999999991111999999999999999999999999999999999999999999111111111111
@@ -408,5 +456,5 @@ scene.setBackgroundImage(img`
     `)
 Ice_knight()
 playertwo()
-iceknight.setStayInScreen(true)
 obstacles(randint(0, 8))
+power2()
