@@ -71,6 +71,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, iceknight, -50, 0)
+    music.pewPew.playUntilDone()
     pause(1000)
 })
 controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
@@ -83,7 +84,7 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
         . . c c c c . . 
         `, player2, 50, 0)
     player2projectile.setKind(SpriteKind.projectile2)
-    music.smallCrash.playUntilDone()
+    music.pewPew.playUntilDone()
 })
 sprites.onOverlap(SpriteKind.player2, SpriteKind.Food, function (sprite, otherSprite) {
     if (info.life() == 10) {
@@ -458,3 +459,9 @@ Ice_knight()
 playertwo()
 obstacles(randint(0, 8))
 power2()
+while (info.player2.life() > 1 && info.player1.life() > 1) {
+    music.playMelody("C5 G B A F A C5 B ", 120)
+}
+while (info.player2.life() == 1 || info.player1.life() == 1) {
+    music.playMelody("E D G F B A C5 B ", 120)
+}
