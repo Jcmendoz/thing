@@ -277,7 +277,7 @@ function obstacles (num: number) {
                                 . . . 8 f f f f f 8 8 f f f f f 
                                 . . . . f f f f . . . . f f f . 
                                 . . . . . . . . . . . . . . . . 
-                                `, SpriteKind.Player)
+                                `, SpriteKind.obstacle)
                             car_6.setPosition(110, 35)
                             if (num > 7) {
                                 car_7 = sprites.create(img`
@@ -297,7 +297,7 @@ function obstacles (num: number) {
                                     . . . 8 f f f f f 8 8 f f f f f 
                                     . . . . f f f f . . . . f f f . 
                                     . . . . . . . . . . . . . . . . 
-                                    `, SpriteKind.Player)
+                                    `, SpriteKind.obstacle)
                                 car_7.setPosition(135, 35)
                                 if (num > 8) {
                                     car_8 = sprites.create(img`
@@ -317,7 +317,7 @@ function obstacles (num: number) {
                                         . . . 8 f f f f f 8 8 f f f f f 
                                         . . . . f f f f . . . . f f f . 
                                         . . . . . . . . . . . . . . . . 
-                                        `, SpriteKind.Player)
+                                        `, SpriteKind.obstacle)
                                     car_8.setPosition(110, 55)
                                 }
                             }
