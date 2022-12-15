@@ -3,7 +3,6 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "sprite-scaling": "*",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1"
     },
     "files": [

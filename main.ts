@@ -3,6 +3,9 @@ namespace SpriteKind {
     export const player2 = SpriteKind.create()
     export const projectile2 = SpriteKind.create()
 }
+namespace StatusBarKind {
+    export const health2 = StatusBarKind.create()
+}
 function power2 () {
     pause(5000)
     powerup = sprites.create(img`
@@ -25,6 +28,10 @@ function power2 () {
         `, SpriteKind.Food)
     powerup.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
 }
+statusbars.onZero(StatusBarKind.health2, function (status) {
+    game.splash("Player 1 wins!")
+    game.over(false)
+})
 function playertwo () {
     player2 = sprites.create(img`
         . . . . 8 8 8 8 8 e . . . . . . 
@@ -46,7 +53,11 @@ function playertwo () {
         `, SpriteKind.player2)
     player2.setPosition(50, 50)
     controller.player2.moveSprite(player2, 25, 25)
-    info.player2.setLife(3)
+    statusbar2 = statusbars.create(20, 4, StatusBarKind.health2)
+    statusbar2.attachToSprite(player2)
+    statusbar2.setColor(7, 2)
+    statusbar2.setBarSize(10, 4)
+    statusbar2.value = 5
     player2.setStayInScreen(true)
 }
 sprites.onOverlap(SpriteKind.projectile2, SpriteKind.obstacle, function (sprite, otherSprite) {
@@ -87,11 +98,11 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
     music.pewPew.playUntilDone()
 })
 sprites.onOverlap(SpriteKind.player2, SpriteKind.Food, function (sprite, otherSprite) {
-    if (info.life() == 10) {
+    if (statusbar2.value == 10) {
         sprite.sayText("Too much health!")
         otherSprite.destroy()
     } else {
-        info.player2.changeLifeBy(1)
+        statusbar2.value += 1
         otherSprite.destroy()
         power2()
     }
@@ -119,31 +130,31 @@ function Ice_knight () {
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Player)
     controller.moveSprite(iceknight, 50, 50)
+    statusbar = statusbars.create(20, 4, StatusBarKind.Health)
+    statusbar.attachToSprite(iceknight)
+    statusbar.setColor(7, 2)
+    statusbar.setBarSize(10, 4)
+    statusbar.value = 5
     iceknight.setPosition(125, 50)
-    info.player1.setLife(3)
     iceknight.setStayInScreen(true)
 }
-sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Player, function (sprite, otherSprite) {
-    info.player1.changeLifeBy(-1)
-    sprite.destroy()
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    if (info.life() >= 10) {
-        sprite.sayText("Too much health!")
-        otherSprite.destroy()
-    } else {
-        info.changeLifeBy(1)
-        otherSprite.destroy()
-        power2()
-    }
-})
-info.player1.onLifeZero(function () {
+statusbars.onZero(StatusBarKind.Health, function (status) {
     game.splash("Player 2 wins!")
     game.over(false)
 })
-info.player2.onLifeZero(function () {
-    game.splash("Player 1 wins!")
-    game.over(false)
+sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Player, function (sprite, otherSprite) {
+    statusbar.value += -1
+    sprite.destroy()
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    if (statusbar.value >= 10) {
+        sprite.sayText("Too much health!")
+        otherSprite.destroy()
+    } else {
+        statusbar.value += 1
+        otherSprite.destroy()
+        power2()
+    }
 })
 function obstacles (num: number) {
     if (num > 1) {
@@ -324,7 +335,7 @@ function start () {
     }
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.player2, function (sprite, otherSprite) {
-    info.player2.changeLifeBy(-1)
+    statusbar2.value += -1
     sprite.destroy()
 })
 let gamestart = 0
@@ -341,6 +352,8 @@ let iceknight: Sprite = null
 let projectile: Sprite = null
 let player2: Sprite = null
 let powerup: Sprite = null
+let statusbar: StatusBarSprite = null
+let statusbar2: StatusBarSprite = null
 if (start()) {
     scene.setBackgroundImage(img`
         9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -468,10 +481,10 @@ if (start()) {
     playertwo()
     obstacles(randint(0, 8))
     power2()
-    while (info.player2.life() > 1 && info.player1.life() > 1) {
+    while (statusbar2.value > 1 && statusbar.value > 1) {
         music.playMelody("C5 G B A F A C5 B ", 120)
     }
-    while (info.player2.life() == 1 || info.player1.life() == 1) {
+    while (statusbar2.value == 1 || statusbar.value == 1) {
         music.playMelody("E D G F B A C5 B ", 120)
     }
 } else {
