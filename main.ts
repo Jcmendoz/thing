@@ -56,8 +56,9 @@ function playertwo () {
     statusbar2 = statusbars.create(20, 4, StatusBarKind.health2)
     statusbar2.attachToSprite(player2)
     statusbar2.setColor(7, 2)
-    statusbar2.setBarSize(10, 4)
+    statusbar2.setBarSize(10, 3)
     statusbar2.value = 5
+    statusbar2.max = 10
     player2.setStayInScreen(true)
 }
 sprites.onOverlap(SpriteKind.projectile2, SpriteKind.obstacle, function (sprite, otherSprite) {
@@ -133,8 +134,9 @@ function Ice_knight () {
     statusbar = statusbars.create(20, 4, StatusBarKind.Health)
     statusbar.attachToSprite(iceknight)
     statusbar.setColor(7, 2)
-    statusbar.setBarSize(10, 4)
+    statusbar.setBarSize(10, 3)
     statusbar.value = 5
+    statusbar.max = 10
     iceknight.setPosition(125, 50)
     iceknight.setStayInScreen(true)
 }
